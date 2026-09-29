@@ -10,23 +10,55 @@ at least 2 charts using matplotlib.
 import os
 import pandas as pd
 import matplotlib
-matplotlib.use("Agg")   # saves to file without needing a display
+
+matplotlib.use("Agg")  # saves to file without needing a display
 import matplotlib.pyplot as plt
 
 # ============================================================
 # Input data — do not modify this
 # ============================================================
 
-messy = pd.DataFrame({
-    "product": ["Widget A", "Widget B", "widget a", "Widget C", "Widget B",
-                "Widget A", " Widget C", "Widget D", None, "Widget A"],
-    "sales":   ["150", "200", "175", "300", "200",
-                "180", "250", "abc", "100", "-50"],
-    "date":    ["2025-01-01", "2025-01-01", "2025-01-02", "2025-01-02", "2025-01-03",
-                "2025-01-03", "2025-01-04", "2025-01-04", "2025-01-05", "2025-01-05"],
-    "region":  ["North", "South", "north", "East", "South",
-                "West", "east", "North", "South", "West"],
-})
+messy = pd.DataFrame(
+    {
+        "product": [
+            "Widget A",
+            "Widget B",
+            "widget a",
+            "Widget C",
+            "Widget B",
+            "Widget A",
+            " Widget C",
+            "Widget D",
+            None,
+            "Widget A",
+        ],
+        "sales": ["150", "200", "175", "300", "200", "180", "250", "abc", "100", "-50"],
+        "date": [
+            "2025-01-01",
+            "2025-01-01",
+            "2025-01-02",
+            "2025-01-02",
+            "2025-01-03",
+            "2025-01-03",
+            "2025-01-04",
+            "2025-01-04",
+            "2025-01-05",
+            "2025-01-05",
+        ],
+        "region": [
+            "North",
+            "South",
+            "north",
+            "East",
+            "South",
+            "West",
+            "east",
+            "North",
+            "South",
+            "West",
+        ],
+    }
+)
 
 print("=" * 60)
 print("BEFORE CLEANING")
@@ -89,7 +121,7 @@ print(df.to_string(index=False))
 #   total_by_product = df.groupby("product")["sales"].sum().sort_values(ascending=False)
 #   daily_sales      = df.groupby("date")["sales"].sum()
 total_by_product = df.groupby("product")["sales"].sum().sort_values(ascending=False)
-daily_sales      = df.groupby("date")["sales"].sum()
+daily_sales = df.groupby("date")["sales"].sum()
 
 # TODO: create a figure with subplots, e.g.:
 #   fig, axes = plt.subplots(1, 3, figsize=(15, 5))

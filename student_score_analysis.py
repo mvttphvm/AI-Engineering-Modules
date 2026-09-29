@@ -10,13 +10,33 @@ No manual for-loops — use pandas methods throughout.
 import pandas as pd
 
 data = {
-    "student":       ["Alice", "Bob", "Charlie", "Diana", "Eve",
-                      "Frank", "Grace", "Henry", "Iris", "Jack"],
-    "course":        ["Python", "Python", "SQL", "SQL", "Python",
-                      "SQL", "Python", "SQL", "Python", "SQL"],
-    "score":         [92, 78, 85, 91, 88, 72, 95, 68, 84, 90],
+    "student": [
+        "Alice",
+        "Bob",
+        "Charlie",
+        "Diana",
+        "Eve",
+        "Frank",
+        "Grace",
+        "Henry",
+        "Iris",
+        "Jack",
+    ],
+    "course": [
+        "Python",
+        "Python",
+        "SQL",
+        "SQL",
+        "Python",
+        "SQL",
+        "Python",
+        "SQL",
+        "Python",
+        "SQL",
+    ],
+    "score": [92, 78, 85, 91, 88, 72, 95, 68, 84, 90],
     "hours_studied": [20, 12, 18, 22, 15, 8, 25, 10, 16, 19],
-    "passed":        [True, True, True, True, True, False, True, False, True, True],
+    "passed": [True, True, True, True, True, False, True, False, True, True],
 }
 df = pd.DataFrame(data)
 
@@ -35,7 +55,7 @@ print("\n" + "=" * 60)
 print("Q1 — Students per course")
 print("=" * 60)
 # TODO: print( df["course"].value_counts() ... )
-print( df["course"].value_counts().sort_index())
+print(df["course"].value_counts().sort_index())
 
 
 # ============================================================
@@ -93,7 +113,9 @@ print("Q5 — Add 'grade' column")
 print("=" * 60)
 # TODO: df["grade"] = pd.cut(df["score"], bins=..., labels=..., right=False)
 #       print(df[["student", "score", "grade"]].to_string(index=False))
-df["grade"] = pd.cut(df["score"], bins = [0, 70, 80, 90, 101], labels=["F", "C", "B", "A"], right=False)
+df["grade"] = pd.cut(
+    df["score"], bins=[0, 70, 80, 90, 101], labels=["F", "C", "B", "A"], right=False
+)
 print(df[["student", "score", "grade"]].to_string(index=False))
 
 
@@ -113,9 +135,8 @@ print("=" * 60)
 #       )
 #       print(grade_dist.to_string())
 grade_dist = (
-                df.groupby("course")["grade"]
-                .value_counts()
-                .unstack(fill_value=0)
-               [["A", "B", "C", "F"]]
-               )
+    df.groupby("course")["grade"]
+    .value_counts()
+    .unstack(fill_value=0)[["A", "B", "C", "F"]]
+)
 print(grade_dist.to_string())
