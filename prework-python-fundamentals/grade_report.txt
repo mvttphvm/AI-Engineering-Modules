@@ -1,0 +1,21 @@
+STUDENT GRADE REPORT
+===================================
+
+Class Summary
+-----------------------------------
+Total students: 0
+Class average: None
+Highest average: None
+Lowest average: None
+
+Grade Distribution
+-----------------------------------
+A: 0
+B: 0
+C: 0
+D: 0
+F: 0
+N/A: 0
+
+Individual Student Results
+-----------------------------------
