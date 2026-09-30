@@ -61,8 +61,10 @@ print("2. Electronics under $100 (cheapest first):")
 # query2 = "SELECT ..."
 # for row in conn.execute(query2):
 #     print(f"   ${row['price']:.2f}  {row['name']}")
-query2 = "SELECT * FROM products WHERE category = 'Electronics' AND price < 100" \
+query2 = (
+    "SELECT * FROM products WHERE category = 'Electronics' AND price < 100"
     " ORDER BY price ASC"
+)
 for row in conn.execute(query2):
     print(f"   ${row['price']:.2f}  {row['name']}")
 
