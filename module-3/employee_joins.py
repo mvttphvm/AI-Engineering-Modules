@@ -104,8 +104,8 @@ query2 = """
      ORDER BY e.name
  """
 for row in conn.execute(query2):
-     dept = row['dept_name'] or "No department"
-     print(f"   {row['name']} — {dept}")
+    dept = row["dept_name"] or "No department"
+    print(f"   {row['name']} — {dept}")
 
 # ── Query 3: INNER JOIN — employees with their projects ───────────────────────
 print("3. Employees and their assigned projects:")
@@ -138,8 +138,8 @@ query5 = """
     LEFT JOIN departments d ON e.department_id = d.id
 """
 for row in conn.execute(query5):
-    dept    = row['dept_name']    or "—"
-    project = row['project_title'] or "—"
+    dept = row["dept_name"] or "—"
+    project = row["project_title"] or "—"
     print(f"   {row['employee_name']:<16} | {dept:<15} | {project}")
 
 conn.close()
@@ -164,6 +164,3 @@ conn.close()
 #    Alice Chen       | Engineering     | Security Audit
 #    Bob Martinez     | Marketing       | Brand Campaign
 #    ...
-
-
-
