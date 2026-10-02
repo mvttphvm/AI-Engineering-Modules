@@ -1,5 +1,12 @@
 from sqlalchemy import (
-    create_engine, String, Integer, ForeignKey, Table, Column, select, func
+    create_engine,
+    String,
+    Integer,
+    ForeignKey,
+    Table,
+    Column,
+    select,
+    func,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 from typing import List
@@ -28,13 +35,11 @@ class Department(Base):
 
     # One department can have multiple teachers
     teachers: Mapped[List["Teacher"]] = relationship(
-        "Teacher",
-        back_populates="department"
+        "Teacher", back_populates="department"
     )
 
     courses: Mapped[List["Course"]] = relationship(
-        "Course",
-        back_populates="department"
+        "Course", back_populates="department"
     )
 
     def __repr__(self) -> str:
@@ -46,20 +51,13 @@ class Teacher(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
-    department_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("departments.id")
-    )
+    department_id: Mapped[int] = mapped_column(Integer, ForeignKey("departments.id"))
 
     department: Mapped["Department"] = relationship(
-        "Department",
-        back_populates="teachers"
+        "Department", back_populates="teachers"
     )
 
-    courses: Mapped[list["Course"]] = relationship(
-        "Course",
-        back_populates="teacher"
-    )
+    courses: Mapped[list["Course"]] = relationship("Course", back_populates="teacher")
 
     def __repr__(self) -> str:
         return f"<Teacher (name = '{self.name}')>"
@@ -71,31 +69,20 @@ class Course(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String, nullable=False)
     credits: Mapped[int] = mapped_column(Integer, default=3)
-    department_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("departments.id")
-    )
+    department_id: Mapped[int] = mapped_column(Integer, ForeignKey("departments.id"))
     teacher_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("teachers.id"),
-        nullable=True
+        Integer, ForeignKey("teachers.id"), nullable=True
     )
 
     department: Mapped["Department"] = relationship(
-        "Department",
-        back_populates="courses"
+        "Department", back_populates="courses"
     )
 
-    teacher: Mapped["Teacher"] = relationship(
-        "Teacher",
-        back_populates="courses"
-    )
+    teacher: Mapped["Teacher"] = relationship("Teacher", back_populates="courses")
 
     # This connects Course and Student through the enrollment table
     students: Mapped[list["Student"]] = relationship(
-        "Student",
-        secondary=student_courses,
-        back_populates="courses"
+        "Student", secondary=student_courses, back_populates="courses"
     )
 
     def __repr__(self) -> str:
@@ -107,18 +94,12 @@ class Student(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
-    email: Mapped[str] = mapped_column(
-        String,
-        unique=True,
-        nullable=False
-    )
+    email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     year: Mapped[int] = mapped_column(Integer, nullable=False)
 
     # Same many-to-many relationship from the Student side
     courses: Mapped[list["Course"]] = relationship(
-        "Course",
-        secondary=student_courses,
-        back_populates="students"
+        "Course", secondary=student_courses, back_populates="students"
     )
 
     def __repr__(self) -> str:
@@ -133,7 +114,6 @@ if __name__ == "__main__":
     Base.metadata.create_all(engine)
 
     with Session(engine) as session:
-
         # ── Seed departments ──────────────────────────────────────────────────
         cs_dept = Department(name="Computer Science")
         math_dept = Department(name="Mathematics")
@@ -142,32 +122,15 @@ if __name__ == "__main__":
         session.flush()
 
         # ── Seed teachers ─────────────────────────────────────────────────────
-        prof_kim = Teacher(
-            name="Prof. Kim",
-            department_id=cs_dept.id
-        )
+        prof_kim = Teacher(name="Prof. Kim", department_id=cs_dept.id)
 
-        prof_lee = Teacher(
-            name="Prof. Lee",
-            department_id=cs_dept.id
-        )
+        prof_lee = Teacher(name="Prof. Lee", department_id=cs_dept.id)
 
-        prof_chen = Teacher(
-            name="Prof. Chen",
-            department_id=math_dept.id
-        )
+        prof_chen = Teacher(name="Prof. Chen", department_id=math_dept.id)
 
-        prof_patel = Teacher(
-            name="Prof. Patel",
-            department_id=math_dept.id
-        )
+        prof_patel = Teacher(name="Prof. Patel", department_id=math_dept.id)
 
-        session.add_all([
-            prof_kim,
-            prof_lee,
-            prof_chen,
-            prof_patel
-        ])
+        session.add_all([prof_kim, prof_lee, prof_chen, prof_patel])
         session.flush()
 
         # ── Seed courses ─────────────────────────────────────────────────────
@@ -175,91 +138,54 @@ if __name__ == "__main__":
             title="Databases 101",
             credits=3,
             department_id=cs_dept.id,
-            teacher_id=prof_kim.id
+            teacher_id=prof_kim.id,
         )
 
         py201 = Course(
             title="Python Advanced",
             credits=3,
             department_id=cs_dept.id,
-            teacher_id=prof_lee.id
+            teacher_id=prof_lee.id,
         )
 
         ai301 = Course(
             title="Artificial Intelligence",
             credits=4,
             department_id=cs_dept.id,
-            teacher_id=prof_kim.id
+            teacher_id=prof_kim.id,
         )
 
         calc1 = Course(
             title="Calculus I",
             credits=4,
             department_id=math_dept.id,
-            teacher_id=prof_chen.id
+            teacher_id=prof_chen.id,
         )
 
         stats = Course(
             title="Statistics",
             credits=3,
             department_id=math_dept.id,
-            teacher_id=prof_patel.id
+            teacher_id=prof_patel.id,
         )
 
-        session.add_all([
-            db101,
-            py201,
-            ai301,
-            calc1,
-            stats
-        ])
+        session.add_all([db101, py201, ai301, calc1, stats])
         session.flush()
 
         # ── Seed students ────────────────────────────────────────────────────
-        alice = Student(
-            name="Alice Chen",
-            email="alice@uni.edu",
-            year=2
-        )
+        alice = Student(name="Alice Chen", email="alice@uni.edu", year=2)
 
-        bob = Student(
-            name="Bob Martinez",
-            email="bob@uni.edu",
-            year=1
-        )
+        bob = Student(name="Bob Martinez", email="bob@uni.edu", year=1)
 
-        carol = Student(
-            name="Carol Singh",
-            email="carol@uni.edu",
-            year=3
-        )
+        carol = Student(name="Carol Singh", email="carol@uni.edu", year=3)
 
-        david = Student(
-            name="David Kim",
-            email="david@uni.edu",
-            year=2
-        )
+        david = Student(name="David Kim", email="david@uni.edu", year=2)
 
-        emily = Student(
-            name="Emily Nguyen",
-            email="emily@uni.edu",
-            year=4
-        )
+        emily = Student(name="Emily Nguyen", email="emily@uni.edu", year=4)
 
-        frank = Student(
-            name="Frank Wilson",
-            email="frank@uni.edu",
-            year=1
-        )
+        frank = Student(name="Frank Wilson", email="frank@uni.edu", year=1)
 
-        session.add_all([
-            alice,
-            bob,
-            carol,
-            david,
-            emily,
-            frank
-        ])
+        session.add_all([alice, bob, carol, david, emily, frank])
         session.flush()
 
         # Add students to courses using the relationship
@@ -289,9 +215,7 @@ if __name__ == "__main__":
     print("=== Departments and Teachers ===")
 
     with Session(engine) as session:
-        departments = session.execute(
-            select(Department)
-        ).scalars().all()
+        departments = session.execute(select(Department)).scalars().all()
 
         for department in departments:
             print(f"  {department.name}:")
@@ -305,9 +229,7 @@ if __name__ == "__main__":
     print("=== Teachers and Courses ===")
 
     with Session(engine) as session:
-        teachers = session.execute(
-            select(Teacher)
-        ).scalars().all()
+        teachers = session.execute(select(Teacher)).scalars().all()
 
         for teacher in teachers:
             print(f"  {teacher.name}:")
@@ -321,9 +243,7 @@ if __name__ == "__main__":
     print("=== Courses and Students ===")
 
     with Session(engine) as session:
-        courses = session.execute(
-            select(Course)
-        ).scalars().all()
+        courses = session.execute(select(Course)).scalars().all()
 
         for course in courses:
             print(f"  {course.title}:")
@@ -337,9 +257,7 @@ if __name__ == "__main__":
     print("=== Students and Courses ===")
 
     with Session(engine) as session:
-        students = session.execute(
-            select(Student)
-        ).scalars().all()
+        students = session.execute(select(Student)).scalars().all()
 
         for student in students:
             print(f"  {student.name}:")
@@ -357,18 +275,11 @@ if __name__ == "__main__":
         stmt = (
             select(
                 Course.title,
-                func.count(
-                    student_courses.c.student_id
-                ).label("student_count")
+                func.count(student_courses.c.student_id).label("student_count"),
             )
-            .join(
-                student_courses,
-                Course.id == student_courses.c.course_id
-            )
+            .join(student_courses, Course.id == student_courses.c.course_id)
             .group_by(Course.id)
-            .having(
-                func.count(student_courses.c.student_id) > 3
-            )
+            .having(func.count(student_courses.c.student_id) > 3)
         )
 
         results = session.execute(stmt).all()
